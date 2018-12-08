@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+  php:
+    container_name: php_nginx_server
+    build: ./
+    image: maddog986/php_nginx_server
+    ports:
+      - 80:80
+    restart: always
+    volumes:
+      - C:/inetpub/wwwroot:/var/www
+    environment:
+      - TZ=America/Los_Angeles
+
+  mysql:
+    container_name: mysql
+    image: mysql:5.7
+    volumes:
+      - mysql:/var/lib/mysql
+    ports:
+      - 3306:3306
+    restart: always
+    environment:
+      - TZ=America/Los_Angeles
+      - MYSQL_ROOT_PASSWORD=root
+
+  phpmyadmin:
+    container_name: phpmyadmin
+    image: phpmyadmin/phpmyadmin
+    depends_on:
+      - mysql
+    ports:
+      - 8181:80
+    environment:
+      - TZ=America/Los_Angeles
+      - PMA_HOST=mysql
+
+volumes:
+  mysql:
